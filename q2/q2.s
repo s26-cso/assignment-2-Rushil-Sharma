@@ -106,10 +106,9 @@ print_loop:
     add t3, t1, t2
     lw a1, 0(t3)   # a1 = result[i]
     # if t0 == s0-1 output_fmt_new
-    addi s0, s0, -1
-    beq t0, s0, last
-    addi s0, s0, 1
-    bne t0, s0, not_last
+    addi t4, s0, -1
+    beq t0, t4, last
+    bne t0, t4, not_last
 last :
     la a0, output_fmt_new
     addi sp, sp, -16
@@ -132,7 +131,7 @@ not_last:
     addi sp, sp, 16
     addi t0, t0, 1
     j print_loop
-
+    
 done:
     li a0, 0
     call exit
