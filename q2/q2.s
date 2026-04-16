@@ -100,7 +100,7 @@ print:
     li t0, 0
 
 print_loop:
-    bge t0, s0, exit # from 0->n-1
+    bge t0, s0, done # from 0->n-1
     la t1, result
     slli t2, t0, 2
     add t3, t1, t2
@@ -108,9 +108,8 @@ print_loop:
     # if t0 == s0-1 output_fmt_new
     addi t4, s0, -1
     beq t0, t4, last
-    bne t0, t4, not_last
-last :
-    la a0, output_fmt_new
+not_last:
+    la a0, output_fmt
     addi sp, sp, -16
     sd t0, 0(sp)
     sd ra, 8(sp)
@@ -120,8 +119,8 @@ last :
     addi sp, sp, 16
     addi t0, t0, 1
     j print_loop
-not_last:
-    la a0, output_fmt
+last :
+    la a0, output_fmt_new
     addi sp, sp, -16
     sd t0, 0(sp)
     sd ra, 8(sp)
