@@ -1,6 +1,7 @@
 .section .data
 input_fmt: .string "%d"
 output_fmt: .string "%d "
+output_fmt_new: .string "%d\n"
 
 .section .bss # block starting symbol helps in initialisation
 # ASSUMPTION : max value of n will be 1000 (int = 4)
@@ -78,7 +79,7 @@ push:
     slli t4, t0, 2 
     add t4, t6, t4 
     sw t1, 0(t4) # stack.top() = i
-    addi t1, t1, 1 # FIX : increment (was decrement)
+    addi t1, t1, 1
     j outer_loop
 
 drain:
@@ -104,6 +105,23 @@ print_loop:
     slli t2, t0, 2
     add t3, t1, t2
     lw a1, 0(t3)   # a1 = result[i]
+    # if t0 == s0-1 output_fmt_new
+    addi s0, s0, -1
+    beq t0, s0, last
+    addi s0, s0, 1
+    bne t0, s0, not_last
+last :
+    la a0, output_fmt_new
+    addi sp, sp, -16
+    sd t0, 0(sp)
+    sd ra, 8(sp)
+    call printf
+    ld t0, 0(sp)
+    ld ra, 8(sp)
+    addi sp, sp, 16
+    addi t0, t0, 1
+    j print_loop
+not_last:
     la a0, output_fmt
     addi sp, sp, -16
     sd t0, 0(sp)

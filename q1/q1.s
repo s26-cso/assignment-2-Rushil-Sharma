@@ -16,7 +16,6 @@ make_node:
     addi sp, sp, 16
     ret
 
-
 # insert(struct Node* root, int val) -> struct Node*
     .globl insert
 insert:
